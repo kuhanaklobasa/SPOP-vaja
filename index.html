@@ -24,7 +24,12 @@
             class="nav-link active"
             data-bs-toggle="tab"
             aria-current="page"
-            >SPOP</a
+            >SPOP Binarno</a
+        >
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="#tab3Id" class="nav-link" data-bs-toggle="tab"
+            >SPOP prikljucki</a
         >
     </li>
     <li class="nav-item" role="presentation">
@@ -393,246 +398,327 @@ function start_eks() {
       </div>
 
     </main>
-<script>
-    // Your code for setting up Mesta and MestaReverse...
-    const Mesta = {
-        // Napisi dictionary glavnih mest in drzav v evropi (Glavno mesto: drzava)
-        "ljubljana": "slovenija",
-        "zagreb": "hrvaška",
-        "beograd": "srbija",
-        "sarajevo": "bosna in hercegovina",
-        "podgorica": "črna gora",
-        "priština": "kosovo",
-        "skopje": "severna makedonija",
-        "tirana": "albanija",
-        "atene": "grčija",
-        "sofija": "bolgarija",
-        "bukarešta": "romunija",
-        "budimpešta": "madžarska",
-        "bratislava": "slovaška",
-        "praga": "češka",
-        "varšava": "poljska",
-        "berlin": "nemčija",
-        "kopenhagen": "danska",
-        "stockholm": "švedska",
-        "oslo": "norveška",
-        "helsinki": "finska",
-        "reykjavik": "islandija",
-        "dublin": "irska",
-        "london": "velika britanija",
-        "amsterdam": "nizozemska",
-        "bruselj": "belgija",
-        "pariz": "francija",
-        "luksemburg": "luksemburg",
-        "bern": "švica",
-        "vatikan": "vatikan",
-        "monako": "monako",
-        "lizbona": "portugalska",
-        "madrid": "španija",
-        "rim": "italija",
-        "valeta": "malta",
-        "san marino": "san marino"
-    };
-  
-    const MestaReverse = {
-        // Napisi dictionary glavnih mest in drzav v evropi (Drzava: glavno mesto)
-        "slovenija": "ljubljana",
-        "hrvaška": "zagreb",
-        "srbija": "beograd",
-        "bosna in hercegovina": "sarajevo",
-        "črna gora": "podgorica",
-        "kosovo": "priština",
-        "makedonija": "skopje",
-        "albanija": "tirana",
-        "grčija": "atene",
-        "bolgarija": "sofija",
-        "romunija": "bukarešta",
-        "madžarska": "budimpešta",
-        "slovaška": "bratislava",
-        "češka": "praga",
-        "poljska": "varšava",
-        "nemčija": "berlin",
-        "danska": "kopenhagen",
-        "švedska": "stockholm",
-        "norveška": "oslo",
-        "finska": "helsinki",
-        "islandija": "reykjavik",
-        "irska": "dublin",
-        "velika britanija": "london",
-        "nizozemska": "amsterdam",
-        "belgija": "bruselj",
-        "francija": "pariz",
-        "luksemburg": "luksemburg",
-        "švica": "bern",
-        "vatikan": "vatikan",
-        "monako": "monako",
-        "portugalska": "lizbona",
-        "španija": "madrid",
-        "italija": "rim",
-        "malta": "valeta",
-        "san marino": "san marino"
-    };
+    <script>
+        // Your code for setting up Mesta and MestaReverse...
+        const Mesta = {
+            // Napisi dictionary glavnih mest in drzav v evropi (Glavno mesto: drzava)
+            "ljubljana": "slovenija",
+            "zagreb": "hrvaška",
+            "beograd": "srbija",
+            "sarajevo": "bosna in hercegovina",
+            "podgorica": "črna gora",
+            "priština": "kosovo",
+            "skopje": "severna makedonija",
+            "tirana": "albanija",
+            "atene": "grčija",
+            "sofija": "bolgarija",
+            "bukarešta": "romunija",
+            "budimpešta": "madžarska",
+            "bratislava": "slovaška",
+            "praga": "češka",
+            "varšava": "poljska",
+            "berlin": "nemčija",
+            "kopenhagen": "danska",
+            "stockholm": "švedska",
+            "oslo": "norveška",
+            "helsinki": "finska",
+            "reykjavik": "islandija",
+            "dublin": "irska",
+            "london": "velika britanija",
+            "amsterdam": "nizozemska",
+            "bruselj": "belgija",
+            "pariz": "francija",
+            "luksemburg": "luksemburg",
+            "bern": "švica",
+            "vatikan": "vatikan",
+            "monako": "monako",
+            "lizbona": "portugalska",
+            "madrid": "španija",
+            "rim": "italija",
+            "valeta": "malta",
+            "san marino": "san marino"
+        };
       
-    // Your code for setting up Mesta and MestaReverse...
-    
-    function start_mesano_geo() {
-        console.log("hi");
-        $('#main-geo').addClass('hidden');
-        $('#game-geo').removeClass('hidden');
-        $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
-        $("#result-container").empty();
-
-        // Combine the keys from both objects into an array
-        const keys = [...Object.keys(Mesta), ...Object.keys(MestaReverse)];
-      
-        // Shuffle the keys randomly
-        for (let i = keys.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [keys[i], keys[j]] = [keys[j], keys[i]];
-        }
-      
-        // Create a new mixed object
-        const mixedObject = {};
-      
-        for (let i = 0; i < keys.length; i++) {
-          const key = keys[i];
-          if (Mesta[key] !== undefined) {
-            mixedObject[`solution${i + 1}`] = {
-              solution: key,
-              display: Mesta[key].toString(),
-              type: "mesto"
-            };
-          } else {
-            mixedObject[`solution${i + 1}`] = {
-              solution: key,
-              display: MestaReverse[key].toString(),
-              type: "drzava"
-            };
-          }
-        }
-      
-        const totalQuestions = Object.keys(mixedObject).length;
-        let currentIndex = 0; // Track the current question index
-        let currentQuestionType = ""; // Track the current question type
-        let correctAnswers = 0; // Track the number of correct answers
-        let wrongAnswers = 0; // Track the number of wrong answers
-        $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
-    
-        function displayNextQuestion() {
-          const currentItem = mixedObject[`solution${currentIndex + 1}`];
-      
-          if (currentItem.type === "drzava") {
-            $("#vnos-mesto").addClass("hidden");
-            $("#vnos-drzava").removeClass("hidden");
-            $("#vnos-drzava label")[0].innerText = `${currentItem.display}: `;
-            currentQuestionType = "drzava";
-          } else if (currentItem.type === "mesto") {
-            $("#vnos-drzava").addClass("hidden");
-            $("#vnos-mesto").removeClass("hidden");
-            $("#vnos-mesto label")[0].innerText = `${currentItem.display}: `;
-            currentQuestionType = "mesto";
-          }
-        }
-        document.getElementById("showResultDrzava").addEventListener("click", function () {
-            document.getElementById("input-drzava").value = mixedObject[`solution${currentIndex + 1}`].solution
-        });
-        document.getElementById("showResultMesto").addEventListener("click", function () {
-            document.getElementById("input-mesto").value = mixedObject[`solution${currentIndex + 1}`].solution
-        });
-      
-        displayNextQuestion(); // Display the first question
-      
-        document.querySelector('#input-drzava').addEventListener('keypress', function (e) {
-          if (e.key === 'Enter') {
-            const inputVal = $("#input-drzava").val().toLowerCase();
-            const currentItem = mixedObject[`solution${currentIndex + 1}`];
-      
-            if (inputVal === currentItem.solution) {
-              // Correct answer logic here
-              correctAnswers++;
-              currentIndex++; // Move to the next question
-              updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
-              $("#input-drzava").val(""); // Clear the input field
-              document.getElementById("input-drzava").style.backgroundColor = "initial"; // Reset background color
-      
-              if (currentIndex < totalQuestions) {
-                displayNextQuestion(); // Display the next question
-              }
-              else {
-                displayResult(correctAnswers, wrongAnswers); // Display the result at the end
-                }
-            } else {
-              // Incorrect answer logic here
-              wrongAnswers++;
-              document.getElementById("input-drzava").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
-            }
-          }
-        });
-      
-        document.querySelector('#input-mesto').addEventListener('keypress', function (e) {
-          if (e.key === 'Enter') {
-            const inputVal = $("#input-mesto").val().toLowerCase();
-            const currentItem = mixedObject[`solution${currentIndex + 1}`];
-      
-            if (inputVal === currentItem.solution) {
-              // Correct answer logic here
-              correctAnswers++;
-              currentIndex++; // Move to the next question
-              updateProgress(correctAnswers,wrongAnswers, totalQuestions); // Update progress
-              $("#input-mesto").val(""); // Clear the input field
-              document.getElementById("input-mesto").style.backgroundColor = "initial"; // Reset background color
-      
-              if (currentIndex < totalQuestions) {
-                displayNextQuestion(); // Display the next question
-              }
-              else {
-                displayResult(correctAnswers, wrongAnswers); // Display the result at the end
-              }
-            } else {
-              // Incorrect answer logic here
-              wrongAnswers++;
-              document.getElementById("input-mesto").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
-            }
-          }
-        });
-      
-        // Function to update the progress in h3 element
-        function updateProgress(correct, wrong, total) {
-                $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
-         }
-        function displayResult(correct, wrong) {
-            const ratio = correct / (correct + wrong);
-            const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
-            // Display the result in an element of your choice
-            // For example, you can create a new <p> element and append it to a specific container
-            const resultElement = document.createElement("p");
-            resultElement.innerText = resultText;
-            document.getElementById("result-container").appendChild(resultElement);
-        }
-      }
-      // Your code for setting up Mesta and MestaReverse...
-    // Your code for setting up Mesta and MestaReverse...
-    
-    function start_drzava() {
+        const MestaReverse = {
+            // Napisi dictionary glavnih mest in drzav v evropi (Drzava: glavno mesto)
+            "slovenija": "ljubljana",
+            "hrvaška": "zagreb",
+            "srbija": "beograd",
+            "bosna in hercegovina": "sarajevo",
+            "črna gora": "podgorica",
+            "kosovo": "priština",
+            "makedonija": "skopje",
+            "albanija": "tirana",
+            "grčija": "atene",
+            "bolgarija": "sofija",
+            "romunija": "bukarešta",
+            "madžarska": "budimpešta",
+            "slovaška": "bratislava",
+            "češka": "praga",
+            "poljska": "varšava",
+            "nemčija": "berlin",
+            "danska": "kopenhagen",
+            "švedska": "stockholm",
+            "norveška": "oslo",
+            "finska": "helsinki",
+            "islandija": "reykjavik",
+            "irska": "dublin",
+            "velika britanija": "london",
+            "nizozemska": "amsterdam",
+            "belgija": "bruselj",
+            "francija": "pariz",
+            "luksemburg": "luksemburg",
+            "švica": "bern",
+            "vatikan": "vatikan",
+            "monako": "monako",
+            "portugalska": "lizbona",
+            "španija": "madrid",
+            "italija": "rim",
+            "malta": "valeta",
+            "san marino": "san marino"
+        };
+          
+        // Your code for setting up Mesta and MestaReverse...
+        
+        function start_mesano_geo() {
             console.log("hi");
             $('#main-geo').addClass('hidden');
             $('#game-geo').removeClass('hidden');
             $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
             $("#result-container").empty();
+    
+            // Combine the keys from both objects into an array
+            const keys = [...Object.keys(Mesta), ...Object.keys(MestaReverse)];
+          
+            // Shuffle the keys randomly
+            for (let i = keys.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [keys[i], keys[j]] = [keys[j], keys[i]];
+            }
+          
+            // Create a new mixed object
+            const mixedObject = {};
+          
+            for (let i = 0; i < keys.length; i++) {
+              const key = keys[i];
+              if (Mesta[key] !== undefined) {
+                mixedObject[`solution${i + 1}`] = {
+                  solution: key,
+                  display: Mesta[key].toString(),
+                  type: "mesto"
+                };
+              } else {
+                mixedObject[`solution${i + 1}`] = {
+                  solution: key,
+                  display: MestaReverse[key].toString(),
+                  type: "drzava"
+                };
+              }
+            }
+          
+            const totalQuestions = Object.keys(mixedObject).length;
+            let currentIndex = 0; // Track the current question index
+            let currentQuestionType = ""; // Track the current question type
+            let correctAnswers = 0; // Track the number of correct answers
+            let wrongAnswers = 0; // Track the number of wrong answers
+            $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
         
-            // Filter questions where the solution is the result
-            const filteredQuestions = Object.keys(MestaReverse).map((key) => ({
+            function displayNextQuestion() {
+              const currentItem = mixedObject[`solution${currentIndex + 1}`];
+          
+              if (currentItem.type === "drzava") {
+                $("#vnos-mesto").addClass("hidden");
+                $("#vnos-drzava").removeClass("hidden");
+                $("#vnos-drzava label")[0].innerText = `${currentItem.display}: `;
+                currentQuestionType = "drzava";
+              } else if (currentItem.type === "mesto") {
+                $("#vnos-drzava").addClass("hidden");
+                $("#vnos-mesto").removeClass("hidden");
+                $("#vnos-mesto label")[0].innerText = `${currentItem.display}: `;
+                currentQuestionType = "mesto";
+              }
+            }
+            document.getElementById("showResultDrzava").addEventListener("click", function () {
+                document.getElementById("input-drzava").value = mixedObject[`solution${currentIndex + 1}`].solution
+            });
+            document.getElementById("showResultMesto").addEventListener("click", function () {
+                document.getElementById("input-mesto").value = mixedObject[`solution${currentIndex + 1}`].solution
+            });
+          
+            displayNextQuestion(); // Display the first question
+          
+            document.querySelector('#input-drzava').addEventListener('keypress', function (e) {
+              if (e.key === 'Enter') {
+                const inputVal = $("#input-drzava").val().toLowerCase();
+                const currentItem = mixedObject[`solution${currentIndex + 1}`];
+          
+                if (inputVal === currentItem.solution) {
+                  // Correct answer logic here
+                  correctAnswers++;
+                  currentIndex++; // Move to the next question
+                  updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
+                  $("#input-drzava").val(""); // Clear the input field
+                  document.getElementById("input-drzava").style.backgroundColor = "initial"; // Reset background color
+          
+                  if (currentIndex < totalQuestions) {
+                    displayNextQuestion(); // Display the next question
+                  }
+                  else {
+                    displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                    }
+                } else {
+                  // Incorrect answer logic here
+                  wrongAnswers++;
+                  document.getElementById("input-drzava").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+                }
+              }
+            });
+          
+            document.querySelector('#input-mesto').addEventListener('keypress', function (e) {
+              if (e.key === 'Enter') {
+                const inputVal = $("#input-mesto").val().toLowerCase();
+                const currentItem = mixedObject[`solution${currentIndex + 1}`];
+          
+                if (inputVal === currentItem.solution) {
+                  // Correct answer logic here
+                  correctAnswers++;
+                  currentIndex++; // Move to the next question
+                  updateProgress(correctAnswers,wrongAnswers, totalQuestions); // Update progress
+                  $("#input-mesto").val(""); // Clear the input field
+                  document.getElementById("input-mesto").style.backgroundColor = "initial"; // Reset background color
+          
+                  if (currentIndex < totalQuestions) {
+                    displayNextQuestion(); // Display the next question
+                  }
+                  else {
+                    displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                  }
+                } else {
+                  // Incorrect answer logic here
+                  wrongAnswers++;
+                  document.getElementById("input-mesto").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+                }
+              }
+            });
+          
+            // Function to update the progress in h3 element
+            function updateProgress(correct, wrong, total) {
+                    $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+             }
+            function displayResult(correct, wrong) {
+                const ratio = correct / (correct + wrong);
+                const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
+                // Display the result in an element of your choice
+                // For example, you can create a new <p> element and append it to a specific container
+                const resultElement = document.createElement("p");
+                resultElement.innerText = resultText;
+                document.getElementById("result-container").appendChild(resultElement);
+            }
+          }
+          // Your code for setting up Mesta and MestaReverse...
+        // Your code for setting up Mesta and MestaReverse...
+        
+        function start_drzava() {
+                console.log("hi");
+                $('#main-geo').addClass('hidden');
+                $('#game-geo').removeClass('hidden');
+                $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
+                $("#result-container").empty();
+            
+                // Filter questions where the solution is the result
+                const filteredQuestions = Object.keys(MestaReverse).map((key) => ({
+                    solution: key,
+                    display: MestaReverse[key].toString(),
+                    type: "drzava"
+                }));
+            
+                // Shuffle the questions randomly
+                for (let i = filteredQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
+                }
+            
+                const totalQuestions = filteredQuestions.length;
+                let currentIndex = 0; // Track the current question index
+                let correctAnswers = 0; // Track the number of correct answers
+                let wrongAnswers = 0; // Track the number of wrong answers
+                $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
+        
+                function displayNextQuestion() {
+                    const currentItem = filteredQuestions[currentIndex];
+                    $("#vnos-mesto").addClass("hidden");
+                    $("#vnos-drzava").removeClass("hidden");
+                    $("#vnos-drzava label")[0].innerText = `${currentItem.display}: `;
+                }
+                displayNextQuestion(); // Display the first question
+            
+                document.getElementById("showResultDrzava").addEventListener("click", function () {
+                        document.getElementById("input-drzava").value = filteredQuestions[currentIndex].solution
+                });
+                document.querySelector('#input-drzava').addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        const inputVal = $("#input-drzava").val().toLowerCase();
+                        const currentItem = filteredQuestions[currentIndex];
+            
+                        if (inputVal === currentItem.solution) {
+                            // Correct answer logic here
+                            correctAnswers++;
+                            currentIndex++; // Move to the next question
+                            updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
+                            $("#input-drzava").val(""); // Clear the input field
+                            document.getElementById("input-drzava").style.backgroundColor = "initial"; // Reset background color
+            
+                            if (currentIndex < totalQuestions) {
+                                displayNextQuestion(); // Display the next question
+                            } else {
+                                displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                            }
+                        } else {
+                            // Incorrect answer logic here
+                            wrongAnswers++;
+                            document.getElementById("input-drzava").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+                        }
+                    }
+                });
+            
+                // Function to update the progress in h3 element
+                function updateProgress(correct, wrong, total) {
+                    $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+             }
+                
+                // Function to display the result at the end
+                function displayResult(correct, wrong) {
+                    const ratio = correct / (correct + wrong);
+                    const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
+                    // Display the result in an element of your choice
+                    // For example, you can create a new <p> element and append it to a specific container
+                    const resultElement = document.createElement("p");
+                    resultElement.innerText = resultText;
+                    document.getElementById("result-container").appendChild(resultElement);
+                }
+            }
+          // Your code for setting up Mesta and MestaReverse...
+        
+        function start_mesto() {
+            console.log("hi");
+            $('#main-geo').addClass('hidden');
+            $('#game-geo').removeClass('hidden');
+            $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
+            $("#result-container").empty();
+    
+            // Filter questions where the solution is the mesto
+            const filteredQuestions = Object.keys(Mesta).map((key) => ({
                 solution: key,
-                display: MestaReverse[key].toString(),
-                type: "drzava"
+                display: Mesta[key].toString(),
+                type: "mesto"
             }));
-        
+    
             // Shuffle the questions randomly
             for (let i = filteredQuestions.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
             }
-        
+    
             const totalQuestions = filteredQuestions.length;
             let currentIndex = 0; // Track the current question index
             let correctAnswers = 0; // Track the number of correct answers
@@ -641,47 +727,50 @@ function start_eks() {
     
             function displayNextQuestion() {
                 const currentItem = filteredQuestions[currentIndex];
-                $("#vnos-mesto").addClass("hidden");
-                $("#vnos-drzava").removeClass("hidden");
-                $("#vnos-drzava label")[0].innerText = `${currentItem.display}: `;
+                $("#vnos-drzava").addClass("hidden");
+                $("#vnos-mesto").removeClass("hidden");
+                $("#vnos-mesto label")[0].innerText = `${currentItem.display}: `;
             }
+    
             displayNextQuestion(); // Display the first question
-        
-            document.getElementById("showResultDrzava").addEventListener("click", function () {
-                    document.getElementById("input-drzava").value = filteredQuestions[currentIndex].solution
+    
+            document.getElementById("showResultMesto").addEventListener("click", function () {
+                document.getElementById("input-mesto").value = filteredQuestions[currentIndex].solution
             });
-            document.querySelector('#input-drzava').addEventListener('keypress', function (e) {
+    
+            document.querySelector('#input-mesto').addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
-                    const inputVal = $("#input-drzava").val().toLowerCase();
+                    const inputVal = $("#input-mesto").val().toLowerCase();
                     const currentItem = filteredQuestions[currentIndex];
-        
+    
                     if (inputVal === currentItem.solution) {
                         // Correct answer logic here
                         correctAnswers++;
                         currentIndex++; // Move to the next question
-                        updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
-                        $("#input-drzava").val(""); // Clear the input field
-                        document.getElementById("input-drzava").style.backgroundColor = "initial"; // Reset background color
-        
+                        updateProgress(correctAnswers,wrongAnswers, totalQuestions); // Update progress
+                        $("#input-mesto").val(""); // Clear the input field
+                        document.getElementById("input-mesto").style.backgroundColor = "initial"; // Reset background color
+    
                         if (currentIndex < totalQuestions) {
                             displayNextQuestion(); // Display the next question
-                        } else {
-                            displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                        }
+                         else {
+                        displayResult(correctAnswers, wrongAnswers); // Display the result at the end
                         }
                     } else {
                         // Incorrect answer logic here
                         wrongAnswers++;
-                        document.getElementById("input-drzava").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+                        document.getElementById("input-mesto").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
                     }
                 }
             });
-        
+    
             // Function to update the progress in h3 element
             function updateProgress(correct, wrong, total) {
-                $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
-         }
-            
-            // Function to display the result at the end
+                    $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+             }
+    
+            // Function to display the correct/wrong ratio
             function displayResult(correct, wrong) {
                 const ratio = correct / (correct + wrong);
                 const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
@@ -692,92 +781,144 @@ function start_eks() {
                 document.getElementById("result-container").appendChild(resultElement);
             }
         }
-      // Your code for setting up Mesta and MestaReverse...
-    
-    function start_mesto() {
-        console.log("hi");
-        $('#main-geo').addClass('hidden');
-        $('#game-geo').removeClass('hidden');
-        $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
-        $("#result-container").empty();
+          
+          </script>
+</div>
+<div class="tab-pane fade" id="tab3Id" role="tabpanel">
+    <main id="main-spop2" class="align-items-center justify-content-center " style="height: 600px;">
+        <div class="d-block text-center">
+          <h1 class="fs-1">Vaje za SPOP prikljucke</h1>
+          <br>
+          <input name="vrednost_pot" id="vrednost_pot" class="btn btn-primary" type="button" onclick="start_spop2()" value="Vaje tip">
+          </div>
+    </main>
+    <main id="game-spop2" class="hidden text-center mt-5">
+      <h1 class=" fs-3 mx-auto">Test</h1>
+      <h3 class="fs-5">0/0</h3>
+      <div id="result-container-spop2"></div>
+      <div class="" id="other">
+      <div id="vnos-spop2" class="hidden">
+      <label for="vnos" class="fs-5">2ˆ = </label>
+      <input type="text" class="fs-5" name="vnos" id="input-spop2" style="width: 200px; margin-left: 0px !important;">
+      <input name="" id="showResultSpop2" class="btn btn-primary" type="button" value="💡">
+      <br>
+      </div>
+      <a name="" id="" class="btn btn-primary" href="/index.html" role="button">Nazaj</a>
+      </div>
 
-        // Filter questions where the solution is the mesto
-        const filteredQuestions = Object.keys(Mesta).map((key) => ({
-            solution: key,
-            display: Mesta[key].toString(),
-            type: "mesto"
-        }));
+    </main>
+<script>
+    // Your code for setting up Mesta and MestaReverse...
+const TipPrikljuckov = {
+    // Napisi dictionary racunalniskih prikljuckov in njihov tip (serijski, vzporedni) z malimi crkami
+    "usb": "serijski",
+    "hdmi": "vzporedni",
+    "vga": "vzporedni",
+    "ethernet": "serijski",
+    "dvi": "vzporedni",
+    "displayport": "vzporedni",
+    "thunderbolt": "vzporedni",
+    "sata": "serijski",
+    "RS232": "serijski", 
+};
 
-        // Shuffle the questions randomly
-        for (let i = filteredQuestions.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
-        }
+  
+// Your code for setting up Mesta and MestaReverse...
 
-        const totalQuestions = filteredQuestions.length;
-        let currentIndex = 0; // Track the current question index
-        let correctAnswers = 0; // Track the number of correct answers
-        let wrongAnswers = 0; // Track the number of wrong answers
-        $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
+function start_spop2() {
+    console.log("hi");
+    $('#main-spop2').addClass('hidden');
+    $('#game-spop2').removeClass('hidden');
+    $("#game-spop2").children("h1")[0].innerText = "Vnesi rešitev";
+    $("#result-container").empty();
 
-        function displayNextQuestion() {
-            const currentItem = filteredQuestions[currentIndex];
-            $("#vnos-drzava").addClass("hidden");
-            $("#vnos-mesto").removeClass("hidden");
-            $("#vnos-mesto label")[0].innerText = `${currentItem.display}: `;
-        }
-
-        displayNextQuestion(); // Display the first question
-
-        document.getElementById("showResultMesto").addEventListener("click", function () {
-            document.getElementById("input-mesto").value = filteredQuestions[currentIndex].solution
-        });
-
-        document.querySelector('#input-mesto').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                const inputVal = $("#input-mesto").val().toLowerCase();
-                const currentItem = filteredQuestions[currentIndex];
-
-                if (inputVal === currentItem.solution) {
-                    // Correct answer logic here
-                    correctAnswers++;
-                    currentIndex++; // Move to the next question
-                    updateProgress(correctAnswers,wrongAnswers, totalQuestions); // Update progress
-                    $("#input-mesto").val(""); // Clear the input field
-                    document.getElementById("input-mesto").style.backgroundColor = "initial"; // Reset background color
-
-                    if (currentIndex < totalQuestions) {
-                        displayNextQuestion(); // Display the next question
-                    }
-                     else {
-                    displayResult(correctAnswers, wrongAnswers); // Display the result at the end
-                    }
-                } else {
-                    // Incorrect answer logic here
-                    wrongAnswers++;
-                    document.getElementById("input-mesto").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
-                }
-            }
-        });
-
-        // Function to update the progress in h3 element
-        function updateProgress(correct, wrong, total) {
-                $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
-         }
-
-        // Function to display the correct/wrong ratio
-        function displayResult(correct, wrong) {
-            const ratio = correct / (correct + wrong);
-            const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
-            // Display the result in an element of your choice
-            // For example, you can create a new <p> element and append it to a specific container
-            const resultElement = document.createElement("p");
-            resultElement.innerText = resultText;
-            document.getElementById("result-container").appendChild(resultElement);
-        }
+    // Filter questions where the solution is the mesto
+    const filteredQuestions = Object.keys(TipPrikljuckov).map((key) => ({
+        solution: TipPrikljuckov[key].toString(),
+        display: key,
+        type: "tip"
+    }));
+    // Shuffle the questions randomly
+    for (let i = filteredQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
     }
-      
-      </script>
+
+    const totalQuestions = filteredQuestions.length;
+    let currentIndex = 0; // Track the current question index
+    let correctAnswers = 0; // Track the number of correct answers
+    let wrongAnswers = 0; // Track the number of wrong answers
+    $('#game-spop2').children("h3")[0].innerText = `0/${totalQuestions}`;
+
+    function displayNextQuestion() {
+        const currentItem = filteredQuestions[currentIndex];
+        $("#vnos-spop2").removeClass("hidden");
+        $("#vnos-spop2 label")[0].innerText = `${currentItem.display}: `;
+    }
+
+    displayNextQuestion(); // Display the first question
+
+    document.getElementById("showResultSpop2").addEventListener("click", function () {
+        document.getElementById("input-spop2").value = filteredQuestions[currentIndex].solution
+    });
+
+    document.querySelector('#input-spop2').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const inputVal = $("#input-spop2").val().toLowerCase();
+            const currentItem = filteredQuestions[currentIndex];
+            console.log("HI3")
+            if (inputVal === currentItem.solution) {
+                console.log("hi2")
+                // Correct answer logic here
+                correctAnswers++;
+                currentIndex++; // Move to the next question
+                $("#input-spop2").val(""); // Clear the input field
+                document.getElementById("input-spop2").style.backgroundColor = "initial"; // Reset background color
+                console.log(currentIndex)
+                console.log(totalQuestions)
+                if (currentIndex < totalQuestions) {
+                    console.log("Hi")
+                    displayNextQuestion(); // Display the next question
+                }
+                else if (currentIndex === totalQuestions){
+                    displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                }
+            } else {
+                // Incorrect answer logic here
+                wrongAnswers++;
+                document.getElementById("input-spop2").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+            }
+            updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
+        }
+    });
+
+    // Function to update the progress in h3 element
+    function updateProgress(correct, wrong, total) {
+        $('#game-spop2').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+    }
+
+    // Function to display the correct/wrong ratio
+function displayResult(correct, wrong) {
+    console.log("Hey hey")
+    const ratio = correct / (correct + wrong);
+    const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${(ratio * 100).toFixed(2)}%)`;
+    // Display the result in an element of your choice
+    // For example, you can create a new <p> element and append it to a specific container
+    const resultElement = document.createElement("p");
+    resultElement.innerText = resultText;
+    resultElement.className = "fs-5";
+    document.getElementById("result-container-spop2").appendChild(resultElement);
+
+    // Hide the input and other elements
+    document.getElementById("other").style.display = 'none';
+    // Add other elements you want to hide here
+    // For example:
+    // document.getElementById("other-element-id").style.display = 'none';
+}
+}
+</script>
+</div>
+
 </div>
 </div>
 
