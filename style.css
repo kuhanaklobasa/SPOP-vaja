@@ -1,0 +1,9 @@
+input {
+    margin: 10px !important;
+}
+#main {
+    display: flex
+}
+.hidden {
+    display: none !important;
+}

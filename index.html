@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>SPOP Vaja</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style.css">
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+</head>
+<body>
+  <!-- Nav tabs -->
+  <ul
+    class="nav nav-tabs"
+    id="navId"
+    role="tablist"
+  >
+    <li class="nav-item">
+        <a
+            href="#tab1Id"
+            class="nav-link active"
+            data-bs-toggle="tab"
+            aria-current="page"
+            >SPOP</a
+        >
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="#tab2Id" class="nav-link" data-bs-toggle="tab"
+            >Geo</a
+        >
+    </li>
+  </ul>
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="tab1Id" role="tabpanel">
+        <main id="main" class="align-items-center justify-content-center " style="height: 600px;">
+        <div class="d-block text-center">
+        <h1 class="fs-1">Vaje za SPOP</h1>
+        <br>
+        <input name="mesano" id="mesano" class="btn btn-primary" type="button" onclick="start_mesano()" value="Vaje mesano">
+        <input name="vrednost_pot" id="vrednost_pot" class="btn btn-primary" type="button" onclick="start_pot()" value="Vaje vrednost potence">
+        <input name="eksponent" id="eksponent" class="btn btn-primary" type="button" onclick="start_eks()" value="Vaje ugani eksponent">
+        </div>
+  </main>
+  <main id="game" class="hidden text-center mt-5">
+    <h1 class=" fs-3 mx-auto">Test</h1>
+    <h3 class="fs-5">0/0</h3>
+    <div id="vnos-eks" class="hidden">
+    <label for="vnos" class="fs-5">2ˆ</label>
+    <input type="text" class="fs-5" name="vnos" id="input-eks" style="width: 30px; margin-left: 0px !important;">
+    <p class="fs-5">= 1024</p>
+    <input name="" id="showResultEks" class="btn btn-primary" type="button" value="💡">
+    <br>
+    <a name="" id="" class="btn btn-primary" href="/index.html" role="button">Nazaj</a>
+
+    </div>
+    <div id="vnos-pot" class="hidden">
+    <label for="vnos" class="fs-5">2ˆ5 =</label>
+    <input type="text" class="fs-5" name="vnos" id="input-pot" style="width: 80px; margin-left: 0px !important;">
+    <input name="" id="showResultPot" class="btn btn-primary" type="button" value="💡">
+    <br>
+    <a name="" id="" class="btn btn-primary" href="/index.html" role="button">Nazaj</a>
+    </div>
+
+  </main>
+  <script>
+// Your code for setting up powersOf2 and powersOf2Reverse...
+const powersOf2 = {
+    "0": 1,
+    "1": 2,
+    "2": 4,
+    "3": 8,
+    "4": 16,
+    "5": 32,
+    "6": 64,
+    "7": 128,
+    "8": 256,
+    "9": 512,
+    "10": 1024,
+    "11": 2048,
+    "12": 4096,
+    "13": 8192,
+    "14": 16384,
+    "15": 32768,
+    "16": 65536
+  };
+  
+  const powersOf2Reverse = {
+    "1": 0,
+    "2": 1,
+    "4": 2,
+    "8": 3,
+    "16": 4,
+    "32": 5,
+    "64": 6,
+    "128": 7,
+    "256": 8,
+    "512": 9,
+    "1024": 10,
+    "2048": 11,
+    "4096": 12,
+    "8192": 13,
+    "16384": 14,
+    "32768": 15,
+    "65536": 16
+  };
+  
+// Your code for setting up powersOf2 and powersOf2Reverse...
+
+function start_mesano() {
+    console.log("hi");
+    $('#main').addClass('hidden');
+    $('#game').removeClass('hidden');
+    $("#game").children("h1")[0].innerText = "Vnesi rešitev";
+  
+    // Combine the keys from both objects into an array
+    const keys = [...Object.keys(powersOf2), ...Object.keys(powersOf2Reverse)];
+  
+    // Shuffle the keys randomly
+    for (let i = keys.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [keys[i], keys[j]] = [keys[j], keys[i]];
+    }
+  
+    // Create a new mixed object
+    const mixedObject = {};
+  
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (powersOf2[key] !== undefined) {
+        mixedObject[`solution${i + 1}`] = {
+          solution: key,
+          display: powersOf2[key].toString(),
+          type: "exponent"
+        };
+      } else {
+        mixedObject[`solution${i + 1}`] = {
+          solution: key,
+          display: powersOf2Reverse[key].toString(),
+          type: "result"
+        };
+      }
+    }
+  
+    const totalQuestions = Object.keys(mixedObject).length;
+    let currentIndex = 0; // Track the current question index
+    let currentQuestionType = ""; // Track the current question type
+    let correctAnswers = 0; // Track the number of correct answers
+    $('#game').children("h3")[0].innerText = `0/${totalQuestions}`;
+
+    function displayNextQuestion() {
+      const currentItem = mixedObject[`solution${currentIndex + 1}`];
+  
+      if (currentItem.type === "result") {
+        $("#vnos-eks").addClass("hidden");
+        $("#vnos-pot").removeClass("hidden");
+        $("#vnos-pot label")[0].innerText = `2^${currentItem.display} = `;
+        currentQuestionType = "result";
+      } else if (currentItem.type === "exponent") {
+        $("#vnos-pot").addClass("hidden");
+        $("#vnos-eks").removeClass("hidden");
+        $("#vnos-eks p")[0].innerText = ` = ${currentItem.display}`;
+        currentQuestionType = "exponent";
+      }
+    }
+    document.getElementById("showResultPot").addEventListener("click", function () {
+        document.getElementById("input-pot").value = mixedObject[`solution${currentIndex + 1}`].solution
+    });
+    document.getElementById("showResultEks").addEventListener("click", function () {
+        document.getElementById("input-eks").value = mixedObject[`solution${currentIndex + 1}`].solution
+    });
+  
+    displayNextQuestion(); // Display the first question
+  
+    document.querySelector('#input-pot').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const inputVal = parseInt($("#input-pot").val());
+        const currentItem = mixedObject[`solution${currentIndex + 1}`];
+  
+        if (inputVal === parseInt(currentItem.solution)) {
+          // Correct answer logic here
+          correctAnswers++;
+          currentIndex++; // Move to the next question
+          updateProgress(correctAnswers, totalQuestions); // Update progress
+          $("#input-pot").val(""); // Clear the input field
+          document.getElementById("input-pot").style.backgroundColor = "initial"; // Reset background color
+  
+          if (currentIndex < totalQuestions) {
+            displayNextQuestion(); // Display the next question
+          }
+        } else {
+          // Incorrect answer logic here
+          document.getElementById("input-pot").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+        }
+      }
+    });
+  
+    document.querySelector('#input-eks').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const inputVal = parseInt($("#input-eks").val());
+        const currentItem = mixedObject[`solution${currentIndex + 1}`];
+  
+        if (inputVal === parseInt(currentItem.solution)) {
+          // Correct answer logic here
+          correctAnswers++;
+          currentIndex++; // Move to the next question
+          updateProgress(correctAnswers, totalQuestions); // Update progress
+          $("#input-eks").val(""); // Clear the input field
+          document.getElementById("input-eks").style.backgroundColor = "initial"; // Reset background color
+  
+          if (currentIndex < totalQuestions) {
+            displayNextQuestion(); // Display the next question
+          }
+        } else {
+          // Incorrect answer logic here
+          document.getElementById("input-eks").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+        }
+      }
+    });
+  
+    // Function to update the progress in h3 element
+    function updateProgress(correct, total) {
+      $('#game').children("h3")[0].innerText = `${correct}/${total}`;
+    }
+  }
+  // Your code for setting up powersOf2 and powersOf2Reverse...
+// Your code for setting up powersOf2 and powersOf2Reverse...
+
+function start_pot() {
+    console.log("hi");
+    $('#main').addClass('hidden');
+    $('#game').removeClass('hidden');
+    $("#game").children("h1")[0].innerText = "Vnesi rešitev (samo rezultati)";
+  
+    // Filter questions where the solution is the result
+    const filteredQuestions = Object.keys(powersOf2Reverse).map((key) => ({
+      solution: key,
+      display: powersOf2Reverse[key].toString(),
+      type: "result"
+    }));
+  
+    // Shuffle the questions randomly
+    for (let i = filteredQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
+    }
+  
+    const totalQuestions = filteredQuestions.length;
+    let currentIndex = 0; // Track the current question index
+    let correctAnswers = 0; // Track the number of correct answers
+    $('#game').children("h3")[0].innerText = `0/${totalQuestions}`;
+
+    function displayNextQuestion() {
+      const currentItem = filteredQuestions[currentIndex];
+      $("#vnos-eks").addClass("hidden");
+      $("#vnos-pot").removeClass("hidden");
+      $("#vnos-pot label")[0].innerText = `2^${currentItem.display} = `;
+    }
+  
+    displayNextQuestion(); // Display the first question
+  
+    document.getElementById("showResultPot").addEventListener("click", function () {
+        document.getElementById("input-pot").value = filteredQuestions[currentIndex].solution
+    });
+    document.querySelector('#input-pot').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const inputVal = parseInt($("#input-pot").val());
+        const currentItem = filteredQuestions[currentIndex];
+  
+        if (inputVal === parseInt(currentItem.solution)) {
+          // Correct answer logic here
+          correctAnswers++;
+          currentIndex++; // Move to the next question
+          updateProgress(correctAnswers, totalQuestions); // Update progress
+          $("#input-pot").val(""); // Clear the input field
+          document.getElementById("input-pot").style.backgroundColor = "initial"; // Reset background color
+  
+          if (currentIndex < totalQuestions) {
+            displayNextQuestion(); // Display the next question
+          }
+        } else {
+          // Incorrect answer logic here
+          document.getElementById("input-pot").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+        }
+      }
+    });
+  
+    // Function to update the progress in h3 element
+    function updateProgress(correct, total) {
+      $('#game').children("h3")[0].innerText = `${correct}/${total}`;
+    }
+  }
+  // Your code for setting up powersOf2 and powersOf2Reverse...
+
+function start_eks() {
+    console.log("hi");
+    $('#main').addClass('hidden');
+    $('#game').removeClass('hidden');
+    $("#game").children("h1")[0].innerText = "Vnesi rešitev (samo eksponenti)";
+  
+    // Filter questions where the solution is the exponent
+    const filteredQuestions = Object.keys(powersOf2).map((key) => ({
+      solution: key,
+      display: powersOf2[key].toString(),
+      type: "exponent"
+    }));
+  
+    // Shuffle the questions randomly
+    for (let i = filteredQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
+    }
+  
+    const totalQuestions = filteredQuestions.length;
+    let currentIndex = 0; // Track the current question index
+    let correctAnswers = 0; // Track the number of correct answers
+    $('#game').children("h3")[0].innerText = `0/${totalQuestions}`;
+
+    function displayNextQuestion() {
+      const currentItem = filteredQuestions[currentIndex];
+      $("#vnos-pot").addClass("hidden");
+      $("#vnos-eks").removeClass("hidden");
+      $("#vnos-eks p")[0].innerText = ` = ${currentItem.display}`;
+    }
+  
+    displayNextQuestion(); // Display the first question
+
+    document.getElementById("showResultEks").addEventListener("click", function () {
+        document.getElementById("input-eks").value = filteredQuestions[currentIndex].solution
+    });
+
+    document.querySelector('#input-eks').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const inputVal = parseInt($("#input-eks").val());
+        const currentItem = filteredQuestions[currentIndex];
+  
+        if (inputVal === parseInt(currentItem.solution)) {
+          // Correct answer logic here
+          correctAnswers++;
+          currentIndex++; // Move to the next question
+          updateProgress(correctAnswers, totalQuestions); // Update progress
+          $("#input-eks").val(""); // Clear the input field
+          document.getElementById("input-eks").style.backgroundColor = "initial"; // Reset background color
+  
+          if (currentIndex < totalQuestions) {
+            displayNextQuestion(); // Display the next question
+          }
+        } else {
+          // Incorrect answer logic here
+          document.getElementById("input-eks").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+        }
+      }
+    });
+  
+    // Function to update the progress in h3 element
+    function updateProgress(correct, total) {
+      $('#game').children("h3")[0].innerText = `${correct}/${total}`;
+    }
+  }
+  
+  </script>
+</div>
+<div class="tab-pane fade" id="tab2Id" role="tabpanel">
+    <main id="main-geo" class="align-items-center justify-content-center " style="height: 600px;">
+        <div class="d-block text-center">
+          <h1 class="fs-1">Vaje za GEO</h1>
+          <br>
+          <input name="mesano" id="mesano" class="btn btn-primary" type="button" onclick="start_mesano_geo()" value="Vaje mesano">
+          <input name="vrednost_pot" id="vrednost_pot" class="btn btn-primary" type="button" onclick="start_drzava()" value="Vaje drzava">
+          <input name="eksponent" id="eksponent" class="btn btn-primary" type="button" onclick="start_mesto()" value="Vaje mesto">
+          </div>
+    </main>
+    <main id="game-geo" class="hidden text-center mt-5">
+      <h1 class=" fs-3 mx-auto">Test</h1>
+      <h3 class="fs-5">0/0</h3>
+      <div id="result-container"></div>
+      <div id="vnos-mesto" class="hidden">
+      <label for="vnos" class="fs-5">2ˆ = </label>
+      <input type="text" class="fs-5" name="vnos" id="input-mesto" style="width: 200px; margin-left: 0px !important;">
+      <input name="" id="showResultMesto" class="btn btn-primary" type="button" value="💡">
+      <br>
+      <a name="" id="" class="btn btn-primary" href="/index.html" role="button">Nazaj</a>
+      </div>
+      <div id="vnos-drzava" class="hidden">
+      <label for="vnos" class="fs-5">2ˆ5 =</label>
+      <input type="text" class="fs-5" name="vnos" id="input-drzava" style="width: 200px; margin-left: 0px !important;">
+      <input name="" id="showResultDrzava" class="btn btn-primary" type="button" value="💡">
+      <br>
+      <a name="" id="" class="btn btn-primary" href="/index.html" role="button">Nazaj</a>
+      </div>
+
+    </main>
+<script>
+    // Your code for setting up Mesta and MestaReverse...
+    const Mesta = {
+        // Napisi dictionary glavnih mest in drzav v evropi (Glavno mesto: drzava)
+        "ljubljana": "slovenija",
+        "zagreb": "hrvaška",
+        "beograd": "srbija",
+        "sarajevo": "bosna in hercegovina",
+        "podgorica": "črna gora",
+        "priština": "kosovo",
+        "skopje": "severna makedonija",
+        "tirana": "albanija",
+        "atene": "grčija",
+        "sofija": "bolgarija",
+        "bukarešta": "romunija",
+        "budimpešta": "madžarska",
+        "bratislava": "slovaška",
+        "praga": "češka",
+        "varšava": "poljska",
+        "berlin": "nemčija",
+        "kopenhagen": "danska",
+        "stockholm": "švedska",
+        "oslo": "norveška",
+        "helsinki": "finska",
+        "reykjavik": "islandija",
+        "dublin": "irska",
+        "london": "velika britanija",
+        "amsterdam": "nizozemska",
+        "bruselj": "belgija",
+        "pariz": "francija",
+        "luksemburg": "luksemburg",
+        "bern": "švica",
+        "vatikan": "vatikan",
+        "monako": "monako",
+        "lizbona": "portugalska",
+        "madrid": "španija",
+        "rim": "italija",
+        "valeta": "malta",
+        "san marino": "san marino"
+    };
+  
+    const MestaReverse = {
+        // Napisi dictionary glavnih mest in drzav v evropi (Drzava: glavno mesto)
+        "slovenija": "ljubljana",
+        "hrvaška": "zagreb",
+        "srbija": "beograd",
+        "bosna in hercegovina": "sarajevo",
+        "črna gora": "podgorica",
+        "kosovo": "priština",
+        "makedonija": "skopje",
+        "albanija": "tirana",
+        "grčija": "atene",
+        "bolgarija": "sofija",
+        "romunija": "bukarešta",
+        "madžarska": "budimpešta",
+        "slovaška": "bratislava",
+        "češka": "praga",
+        "poljska": "varšava",
+        "nemčija": "berlin",
+        "danska": "kopenhagen",
+        "švedska": "stockholm",
+        "norveška": "oslo",
+        "finska": "helsinki",
+        "islandija": "reykjavik",
+        "irska": "dublin",
+        "velika britanija": "london",
+        "nizozemska": "amsterdam",
+        "belgija": "bruselj",
+        "francija": "pariz",
+        "luksemburg": "luksemburg",
+        "švica": "bern",
+        "vatikan": "vatikan",
+        "monako": "monako",
+        "portugalska": "lizbona",
+        "španija": "madrid",
+        "italija": "rim",
+        "malta": "valeta",
+        "san marino": "san marino"
+    };
+      
+    // Your code for setting up Mesta and MestaReverse...
+    
+    function start_mesano_geo() {
+        console.log("hi");
+        $('#main-geo').addClass('hidden');
+        $('#game-geo').removeClass('hidden');
+        $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
+        $("#result-container").empty();
+
+        // Combine the keys from both objects into an array
+        const keys = [...Object.keys(Mesta), ...Object.keys(MestaReverse)];
+      
+        // Shuffle the keys randomly
+        for (let i = keys.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [keys[i], keys[j]] = [keys[j], keys[i]];
+        }
+      
+        // Create a new mixed object
+        const mixedObject = {};
+      
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          if (Mesta[key] !== undefined) {
+            mixedObject[`solution${i + 1}`] = {
+              solution: key,
+              display: Mesta[key].toString(),
+              type: "mesto"
+            };
+          } else {
+            mixedObject[`solution${i + 1}`] = {
+              solution: key,
+              display: MestaReverse[key].toString(),
+              type: "drzava"
+            };
+          }
+        }
+      
+        const totalQuestions = Object.keys(mixedObject).length;
+        let currentIndex = 0; // Track the current question index
+        let currentQuestionType = ""; // Track the current question type
+        let correctAnswers = 0; // Track the number of correct answers
+        let wrongAnswers = 0; // Track the number of wrong answers
+        $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
+    
+        function displayNextQuestion() {
+          const currentItem = mixedObject[`solution${currentIndex + 1}`];
+      
+          if (currentItem.type === "drzava") {
+            $("#vnos-mesto").addClass("hidden");
+            $("#vnos-drzava").removeClass("hidden");
+            $("#vnos-drzava label")[0].innerText = `${currentItem.display}: `;
+            currentQuestionType = "drzava";
+          } else if (currentItem.type === "mesto") {
+            $("#vnos-drzava").addClass("hidden");
+            $("#vnos-mesto").removeClass("hidden");
+            $("#vnos-mesto label")[0].innerText = `${currentItem.display}: `;
+            currentQuestionType = "mesto";
+          }
+        }
+        document.getElementById("showResultDrzava").addEventListener("click", function () {
+            document.getElementById("input-drzava").value = mixedObject[`solution${currentIndex + 1}`].solution
+        });
+        document.getElementById("showResultMesto").addEventListener("click", function () {
+            document.getElementById("input-mesto").value = mixedObject[`solution${currentIndex + 1}`].solution
+        });
+      
+        displayNextQuestion(); // Display the first question
+      
+        document.querySelector('#input-drzava').addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+            const inputVal = $("#input-drzava").val().toLowerCase();
+            const currentItem = mixedObject[`solution${currentIndex + 1}`];
+      
+            if (inputVal === currentItem.solution) {
+              // Correct answer logic here
+              correctAnswers++;
+              currentIndex++; // Move to the next question
+              updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
+              $("#input-drzava").val(""); // Clear the input field
+              document.getElementById("input-drzava").style.backgroundColor = "initial"; // Reset background color
+      
+              if (currentIndex < totalQuestions) {
+                displayNextQuestion(); // Display the next question
+              }
+              else {
+                displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                }
+            } else {
+              // Incorrect answer logic here
+              wrongAnswers++;
+              document.getElementById("input-drzava").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+            }
+          }
+        });
+      
+        document.querySelector('#input-mesto').addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+            const inputVal = $("#input-mesto").val().toLowerCase();
+            const currentItem = mixedObject[`solution${currentIndex + 1}`];
+      
+            if (inputVal === currentItem.solution) {
+              // Correct answer logic here
+              correctAnswers++;
+              currentIndex++; // Move to the next question
+              updateProgress(correctAnswers,wrongAnswers, totalQuestions); // Update progress
+              $("#input-mesto").val(""); // Clear the input field
+              document.getElementById("input-mesto").style.backgroundColor = "initial"; // Reset background color
+      
+              if (currentIndex < totalQuestions) {
+                displayNextQuestion(); // Display the next question
+              }
+              else {
+                displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+              }
+            } else {
+              // Incorrect answer logic here
+              wrongAnswers++;
+              document.getElementById("input-mesto").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+            }
+          }
+        });
+      
+        // Function to update the progress in h3 element
+        function updateProgress(correct, wrong, total) {
+                $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+         }
+        function displayResult(correct, wrong) {
+            const ratio = correct / (correct + wrong);
+            const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
+            // Display the result in an element of your choice
+            // For example, you can create a new <p> element and append it to a specific container
+            const resultElement = document.createElement("p");
+            resultElement.innerText = resultText;
+            document.getElementById("result-container").appendChild(resultElement);
+        }
+      }
+      // Your code for setting up Mesta and MestaReverse...
+    // Your code for setting up Mesta and MestaReverse...
+    
+    function start_drzava() {
+            console.log("hi");
+            $('#main-geo').addClass('hidden');
+            $('#game-geo').removeClass('hidden');
+            $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
+            $("#result-container").empty();
+        
+            // Filter questions where the solution is the result
+            const filteredQuestions = Object.keys(MestaReverse).map((key) => ({
+                solution: key,
+                display: MestaReverse[key].toString(),
+                type: "drzava"
+            }));
+        
+            // Shuffle the questions randomly
+            for (let i = filteredQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
+            }
+        
+            const totalQuestions = filteredQuestions.length;
+            let currentIndex = 0; // Track the current question index
+            let correctAnswers = 0; // Track the number of correct answers
+            let wrongAnswers = 0; // Track the number of wrong answers
+            $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
+    
+            function displayNextQuestion() {
+                const currentItem = filteredQuestions[currentIndex];
+                $("#vnos-mesto").addClass("hidden");
+                $("#vnos-drzava").removeClass("hidden");
+                $("#vnos-drzava label")[0].innerText = `${currentItem.display}: `;
+            }
+            displayNextQuestion(); // Display the first question
+        
+            document.getElementById("showResultDrzava").addEventListener("click", function () {
+                    document.getElementById("input-drzava").value = filteredQuestions[currentIndex].solution
+            });
+            document.querySelector('#input-drzava').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    const inputVal = $("#input-drzava").val().toLowerCase();
+                    const currentItem = filteredQuestions[currentIndex];
+        
+                    if (inputVal === currentItem.solution) {
+                        // Correct answer logic here
+                        correctAnswers++;
+                        currentIndex++; // Move to the next question
+                        updateProgress(correctAnswers, wrongAnswers, totalQuestions); // Update progress
+                        $("#input-drzava").val(""); // Clear the input field
+                        document.getElementById("input-drzava").style.backgroundColor = "initial"; // Reset background color
+        
+                        if (currentIndex < totalQuestions) {
+                            displayNextQuestion(); // Display the next question
+                        } else {
+                            displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                        }
+                    } else {
+                        // Incorrect answer logic here
+                        wrongAnswers++;
+                        document.getElementById("input-drzava").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+                    }
+                }
+            });
+        
+            // Function to update the progress in h3 element
+            function updateProgress(correct, wrong, total) {
+                $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+         }
+            
+            // Function to display the result at the end
+            function displayResult(correct, wrong) {
+                const ratio = correct / (correct + wrong);
+                const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
+                // Display the result in an element of your choice
+                // For example, you can create a new <p> element and append it to a specific container
+                const resultElement = document.createElement("p");
+                resultElement.innerText = resultText;
+                document.getElementById("result-container").appendChild(resultElement);
+            }
+        }
+      // Your code for setting up Mesta and MestaReverse...
+    
+    function start_mesto() {
+        console.log("hi");
+        $('#main-geo').addClass('hidden');
+        $('#game-geo').removeClass('hidden');
+        $("#game-geo").children("h1")[0].innerText = "Vnesi rešitev";
+        $("#result-container").empty();
+
+        // Filter questions where the solution is the mesto
+        const filteredQuestions = Object.keys(Mesta).map((key) => ({
+            solution: key,
+            display: Mesta[key].toString(),
+            type: "mesto"
+        }));
+
+        // Shuffle the questions randomly
+        for (let i = filteredQuestions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
+        }
+
+        const totalQuestions = filteredQuestions.length;
+        let currentIndex = 0; // Track the current question index
+        let correctAnswers = 0; // Track the number of correct answers
+        let wrongAnswers = 0; // Track the number of wrong answers
+        $('#game-geo').children("h3")[0].innerText = `0/${totalQuestions}`;
+
+        function displayNextQuestion() {
+            const currentItem = filteredQuestions[currentIndex];
+            $("#vnos-drzava").addClass("hidden");
+            $("#vnos-mesto").removeClass("hidden");
+            $("#vnos-mesto label")[0].innerText = `${currentItem.display}: `;
+        }
+
+        displayNextQuestion(); // Display the first question
+
+        document.getElementById("showResultMesto").addEventListener("click", function () {
+            document.getElementById("input-mesto").value = filteredQuestions[currentIndex].solution
+        });
+
+        document.querySelector('#input-mesto').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const inputVal = $("#input-mesto").val().toLowerCase();
+                const currentItem = filteredQuestions[currentIndex];
+
+                if (inputVal === currentItem.solution) {
+                    // Correct answer logic here
+                    correctAnswers++;
+                    currentIndex++; // Move to the next question
+                    updateProgress(correctAnswers,wrongAnswers, totalQuestions); // Update progress
+                    $("#input-mesto").val(""); // Clear the input field
+                    document.getElementById("input-mesto").style.backgroundColor = "initial"; // Reset background color
+
+                    if (currentIndex < totalQuestions) {
+                        displayNextQuestion(); // Display the next question
+                    }
+                     else {
+                    displayResult(correctAnswers, wrongAnswers); // Display the result at the end
+                    }
+                } else {
+                    // Incorrect answer logic here
+                    wrongAnswers++;
+                    document.getElementById("input-mesto").style.backgroundColor = "rgba(255, 0, 0, 0.4)";
+                }
+            }
+        });
+
+        // Function to update the progress in h3 element
+        function updateProgress(correct, wrong, total) {
+                $('#game-geo').children("h3")[0].innerHTML = `<span style="color: green">${correct}</span>/<span style="color: red">${wrong}</span>/${total}`;
+         }
+
+        // Function to display the correct/wrong ratio
+        function displayResult(correct, wrong) {
+            const ratio = correct / (correct + wrong);
+            const resultText = `Pravilno/Nepravilno: ${correct}/${wrong} (${ratio.toFixed(2) * 100}%)`;
+            // Display the result in an element of your choice
+            // For example, you can create a new <p> element and append it to a specific container
+            const resultElement = document.createElement("p");
+            resultElement.innerText = resultText;
+            document.getElementById("result-container").appendChild(resultElement);
+        }
+    }
+      
+      </script>
+</div>
+</div>
+
+<!-- (Optional) - Place this js code after initializing bootstrap.min.js or bootstrap.bundle.min.js -->
+
+
+
+<!-- Bootstrap JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+</script>
+<script>
+    var triggerEl = document.querySelector("#navId a");
+    bootstrap.Tab.getInstance(triggerEl).show(); // Select tab by name
+</script>
+</body>
+
+</html>
