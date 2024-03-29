@@ -1,9 +1,19 @@
 input {
     margin: 10px !important;
 }
-#main {
+#main,#main-geo,#main-spop2 {
     display: flex
 }
 .hidden {
     display: none !important;
+}
+html,body {
+    height: 100vh;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
 }
