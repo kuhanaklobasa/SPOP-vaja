@@ -37,6 +37,11 @@
             >Geo</a
         >
     </li>
+    <li class="nav-item" role="presentation">
+        <a href="#tab4Id" class="nav-link" data-bs-toggle="tab"
+            >RAKO</a
+        >
+    </li>
   </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -925,6 +930,115 @@ function displayResult(correct, wrong) {
 
 </div>
 </div>
+
+<div class="tab-pane fade" id="tab4Id" role="tabpanel">
+  <main id="main-rako3" class="align-items-center justify-content-center" style="height: 600px;">
+    <div class="d-block text-center">
+      <h1 class="fs-1">Vaje za RAKO 3.test</h1>
+      <br>
+      <input name="vrednost_pot" id="vrednost_pot" class="btn btn-primary" type="button" onclick="startTest()" value="Start">
+    </div>
+  </main>
+
+  <main id="game-rako3" class="hidden text-center mt-5">
+    <h1 class="fs-3 mx-auto">Test</h1>
+    <div id="vprasanje" class="fs-3 text-underline"></div>
+    <div id="other">
+      <h1 id="odgovor" class="fs-5">Odgovor je skrit.</h1>
+      <input name="" id="showResultRako3" class="btn btn-primary" type="button" value="💡" onclick="showAnswer()">
+      <br>
+    </div>
+    <a name="" id="" class="btn btn-primary" href="/index.html" role="button">Nazaj</a>
+  </main>
+</div>
+
+<script>
+  // Define questions and answers
+  const questionsAndAnswers = [
+    { question: "Kaj je IPv6?", answer: "IPv6 je internetni protokol naslednje generacije, ki nadomešča IPv4 in omogoča več naslovov." },
+    { question: "Koliko bitov ima naslov IPv6?", answer: "IPv6 naslov ima 128 bitov." },
+    { question: "Kako je zapisan naslov IPv6?", answer: "IPv6 naslov je zapisan v šestnajstiškem sistemu in sklope ločujemo z dvopičjem." },
+    { question: "Kaj pomeni SLAAC pri IPv6?", answer: "SLAAC (Stateless Address Autoconfiguration) omogoča napravam, da si same generirajo IPv6 naslov brez DHCP strežnika." },
+    { question: "Katere vrste naslovov obstajajo v IPv6?", answer: "Obstajajo globalno unikatni, link-local, lokalni IP (::1/128) in privzeti prehod (::/0) naslovi." },
+    { question: "Katera polja zagotavljajo kvaliteto storitve v IPv6?", answer: "Polji Traffic class in Flow control." },
+    { question: "Kateri protokoli delujejo na transportni plasti?", answer: "TCP, UDP in SCTP." },
+    { question: "Kaj je TCP?", answer: "TCP (Transmission Control Protocol) je zanesljiv protokol, ki razbija dolga sporočila na segmente, preverja napake in zagotavlja vrstni red prenosa." },
+    { question: "Kaj pomeni trojno rokovanje v TCP?", answer: "Trojno rokovanje (three-way handshake) vzpostavi povezavo med napravama s sinhronizacijskim mehanizmom." },
+    { question: "Kaj je UDP?", answer: "UDP (User Datagram Protocol) je hitrejši, a nezanesljiv protokol, ki ne preverja dostave podatkov." },
+    { question: "Kaj je NAT?", answer: "NAT (Network Address Translation) omogoča prevajanje notranjih IP naslovov v zunanje, da lahko več naprav uporablja en javni IP." },
+    { question: "Kaj pomeni avtentikacija?", answer: "Avtentikacija preverja identiteto uporabnika na podlagi gesla, prstnega odtisa ali druge metode." },
+    { question: "Kaj pomeni avtorizacija?", answer: "Avtorizacija določa, kaj lahko uporabnik počne po uspešni avtentikaciji." },
+    { question: "Kaj je sejni žeton?", answer: "Sejni žeton (session token) je unikatna vrednost, ki identificira uporabnikovo povezavo brez ponovne avtentikacije." },
+    { question: "Katera plast v OSI modelu skrbi za šifriranje?", answer: "Predstavitvena plast (6. plast OSI modela)." },
+    { question: "Kaj je simetrično šifriranje?", answer: "Simetrično šifriranje uporablja isti ključ za šifriranje in dešifriranje podatkov." },
+    { question: "Kaj je asimetrično šifriranje?", answer: "Asimetrično šifriranje uporablja par ključev: javni ključ za šifriranje in zasebni ključ za dešifriranje." },
+    { question: "Kaj je Cezarjeva šifra?", answer: "Cezarjeva šifra je substitucijska šifra, ki premakne vsako črko za določen številčni premik v abecedi." },
+];
+
+console.log(questionsAndAnswers);
+
+  let currentQuestionIndex = -1;
+  let currentAnswer = "";
+
+  // Function to start the test when the 'Start' button is clicked
+  function startTest() {
+      // Show the game container and hide the start screen
+      document.getElementById("main-rako3").classList.add("hidden");
+      document.getElementById("game-rako3").classList.remove("hidden");
+      
+      // Start the first question
+      nextQuestion();
+  }
+
+  // Function to show the next question
+ // Function to show the next question
+function nextQuestion() {
+  currentQuestionIndex++;
+   
+  if (currentQuestionIndex < questionsAndAnswers.length) {
+    // Get the next question and answer
+    const currentQuestion = questionsAndAnswers[currentQuestionIndex];
+    document.getElementById("vprasanje").innerText = currentQuestion.question;
+    currentAnswer = currentQuestion.answer;
+    
+    // Reset the answer text and hide it
+    document.getElementById("odgovor").innerText = "Odgovor je skrit.";
+  } else {
+    // If there are no more questions, show the end message
+    document.getElementById("vprasanje").innerText = "Konec vprašanj!";
+    document.getElementById("odgovor").innerText = "";
+    document.getElementById("showResultRako3").disabled = true; // Disable button after all questions
+  }
+}
+
+  // Function to show the answer when the 💡 button is clicked
+  function showAnswer() {
+    console.log("show")
+    document.getElementById("odgovor").innerText = currentAnswer;
+  }
+
+  // Event listener for spacebar to move to the next question
+  let spaceKeyActive = false;
+
+document.addEventListener("keydown", function(event) {
+  if (event.code === "Space" && !spaceKeyActive) {
+      spaceKeyActive = true; // Prevent repeated triggers
+      document.getElementById("odgovor").innerText = "Odgovor je skrit."; // Hide previous answer
+      nextQuestion(); // Load next question
+  }
+});
+
+document.addEventListener("keyup", function(event) {
+  if (event.code === "Space") {
+      spaceKeyActive = false; // Reset flag on key release
+  }
+});
+
+</script>
+
+
+
+
 
     <div class="footer text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
         © 2024 Vse pravice pridržane:
